@@ -136,22 +136,49 @@ export default function ProblemWorkspace({ problem, nextProblemId }: Props) {
       {/* 解答前の操作 */}
       {!result && (
         <section className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && submitAnswer()}
-              placeholder="ここに答えを書こう"
-              className="flex-1 rounded-2xl border-2 border-ink/15 bg-white px-4 py-3 text-lg outline-none focus:border-sky-400"
-            />
-            <button
-              onClick={submitAnswer}
-              disabled={!answer.trim()}
-              className="rounded-2xl bg-sky-600 px-6 py-3 font-bold text-white transition hover:bg-sky-700 disabled:opacity-40"
-            >
-              答え合わせ
-            </button>
-          </div>
+          {problem.answerType === "choice" && problem.choices ? (
+            <div className="space-y-3">
+              <div className="grid gap-2">
+                {problem.choices.map((choice) => (
+                  <button
+                    key={choice}
+                    onClick={() => setAnswer(choice)}
+                    className={`rounded-2xl border-2 px-4 py-3 text-left transition ${
+                      answer === choice
+                        ? "border-sky-500 bg-sky-50 font-bold"
+                        : "border-ink/15 bg-white hover:border-ink/40"
+                    }`}
+                  >
+                    {choice}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={submitAnswer}
+                disabled={!answer.trim()}
+                className="w-full rounded-2xl bg-sky-600 px-6 py-3 font-bold text-white transition hover:bg-sky-700 disabled:opacity-40 sm:w-auto"
+              >
+                答え合わせ
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <input
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && submitAnswer()}
+                placeholder="ここに答えを書こう"
+                className="flex-1 rounded-2xl border-2 border-ink/15 bg-white px-4 py-3 text-lg outline-none focus:border-sky-400"
+              />
+              <button
+                onClick={submitAnswer}
+                disabled={!answer.trim()}
+                className="rounded-2xl bg-sky-600 px-6 py-3 font-bold text-white transition hover:bg-sky-700 disabled:opacity-40"
+              >
+                答え合わせ
+              </button>
+            </div>
+          )}
 
           <div className="flex items-center gap-3">
             <button

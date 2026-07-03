@@ -57,6 +57,21 @@ export default function HomePage() {
         </p>
       </section>
 
+      <section>
+        <Link
+          href="/camera"
+          className="flex items-center gap-4 rounded-2xl border-2 border-sky-200 bg-sky-50 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
+        >
+          <span className="text-4xl">📷</span>
+          <span>
+            <span className="block text-lg font-bold">写真でしつもん</span>
+            <span className="block text-sm text-ink/60">
+              ワークやプリントのわからない問題を撮ると、AIの先生がヒントをくれるよ
+            </span>
+          </span>
+        </Link>
+      </section>
+
       <section className="space-y-3">
         <h2 className="font-bold">教科をえらぼう</h2>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">

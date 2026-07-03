@@ -1,9 +1,18 @@
 import type { Grade, Problem, SubjectId, Unit } from "../types";
 import { mathGrade1 } from "./math-grade1";
 import { englishGrade1 } from "./english-grade1";
+import { japaneseGrade1 } from "./japanese-grade1";
+import { scienceGrade1 } from "./science-grade1";
+import { socialGrade1 } from "./social-grade1";
 
 // 教科・学年を追加するときは、問題ファイルを作ってこの配列に足すだけでよい。
-const ALL_PROBLEMS: Problem[] = [...mathGrade1, ...englishGrade1];
+const ALL_PROBLEMS: Problem[] = [
+  ...mathGrade1,
+  ...englishGrade1,
+  ...japaneseGrade1,
+  ...scienceGrade1,
+  ...socialGrade1,
+];
 
 export function findProblems(filter: {
   subject?: SubjectId;

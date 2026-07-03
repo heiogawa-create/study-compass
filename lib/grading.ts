@@ -34,8 +34,19 @@ function normalizeEnglish(s: string): string {
     .replace(/\.+$/, "");
 }
 
+/** 国語・理科・社会向け: 空白除去・末尾の句点や「です」を無視 */
+function normalizeJapanese(s: string): string {
+  return toHalfWidth(s)
+    .replace(/\s+/g, "")
+    .replace(/[。．.]+$/, "")
+    .replace(/です$/, "")
+    .toLowerCase();
+}
+
 export function normalizeAnswer(subject: Problem["subject"], s: string): string {
-  return subject === "math" ? normalizeMath(s) : normalizeEnglish(s);
+  if (subject === "math") return normalizeMath(s);
+  if (subject === "english") return normalizeEnglish(s);
+  return normalizeJapanese(s);
 }
 
 export function judge(problem: Problem, studentAnswer: string): boolean {

@@ -38,6 +38,46 @@ export async function generateText(system: string, userMessage: string): Promise
   return text;
 }
 
+export type ImageMediaType = "image/jpeg" | "image/png" | "image/webp";
+
+/**
+ * 画像（base64） + system prompt でテキストを生成する。写真の問題解析に使う。
+ */
+export async function generateVisionText(
+  system: string,
+  imageBase64: string,
+  mediaType: ImageMediaType,
+  userMessage: string
+): Promise<string> {
+  const response = await getClient().messages.create({
+    model: MODEL,
+    max_tokens: 1024,
+    system,
+    output_config: { effort: "low" },
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image",
+            source: { type: "base64", media_type: mediaType, data: imageBase64 },
+          },
+          { type: "text", text: userMessage },
+        ],
+      },
+    ],
+  });
+
+  const text = response.content
+    .filter((block): block is Anthropic.TextBlock => block.type === "text")
+    .map((block) => block.text)
+    .join("")
+    .trim();
+
+  if (!text) throw new Error("AIからの応答が空でした");
+  return text;
+}
+
 /** SDKの典型エラーを日本語メッセージへ変換する */
 export function toFriendlyErrorMessage(error: unknown): { status: number; message: string } {
   if (error instanceof Anthropic.RateLimitError) {
