@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { findProblems, listGrades, listUnits } from "@/lib/problems";
 import { getSubject, SUBJECTS } from "@/lib/subjects";
 import { GRADE_LABELS, type Grade } from "@/lib/types";
+import { getLesson } from "@/lib/lessons/index";
 
 export function generateStaticParams() {
   const params: { subject: string; unitId: string }[] = [];
@@ -36,6 +37,7 @@ export default function UnitPage({
   const problems = findProblems({ subject: subject.id, grade, unitId: params.unitId });
   if (problems.length === 0) notFound();
   const unitName = problems[0].unit.name;
+  const lesson = getLesson(subject.id, params.unitId);
 
   return (
     <div className="space-y-6">
@@ -53,6 +55,13 @@ export default function UnitPage({
           </span>
         </h1>
       </div>
+
+      {lesson && (
+        <section className="rounded-2xl border-2 border-sky-200 bg-sky-50 p-5">
+          <div className="mb-2 text-sm font-bold text-sky-700">📘 今日学ぶこと</div>
+          <p className="whitespace-pre-wrap leading-relaxed">{lesson}</p>
+        </section>
+      )}
 
       <ul className="space-y-2">
         {problems.map((p, i) => (
