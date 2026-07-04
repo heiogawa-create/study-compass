@@ -16,10 +16,12 @@ const HINT_TITLES: Record<HintLevel, string> = {
 interface Props {
   problem: Problem;
   nextProblemId: string | null;
+  /** 「一覧にもどる」の戻り先（単元の問題一覧ページ） */
+  backHref: string;
 }
 
 // 問題演習画面。ヒントは1→2→3の順にのみ開放し、使った段階を記録する。
-export default function ProblemWorkspace({ problem, nextProblemId }: Props) {
+export default function ProblemWorkspace({ problem, nextProblemId, backHref }: Props) {
   const [answer, setAnswer] = useState("");
   const [hints, setHints] = useState<string[]>([]);
   const [hintLoading, setHintLoading] = useState(false);
@@ -105,8 +107,8 @@ export default function ProblemWorkspace({ problem, nextProblemId }: Props) {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="text-sm text-ink/60">
-        <Link href={`/study/${problem.subject}`} className="underline hover:no-underline">
-          ← 問題一覧にもどる
+        <Link href={backHref} className="underline hover:no-underline">
+          ← 単元の問題一覧にもどる
         </Link>
         <span className="ml-3">
           {GRADE_LABELS[problem.grade]}・{problem.unit.name}・{"★".repeat(problem.difficulty)}
@@ -253,10 +255,10 @@ export default function ProblemWorkspace({ problem, nextProblemId }: Props) {
               </Link>
             ) : (
               <Link
-                href={`/study/${problem.subject}`}
+                href={backHref}
                 className="rounded-2xl bg-sky-600 px-6 py-3 font-bold text-white hover:bg-sky-700"
               >
-                問題一覧へもどる
+                単元の問題一覧へもどる
               </Link>
             )}
           </div>

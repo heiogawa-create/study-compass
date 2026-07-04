@@ -8,7 +8,9 @@ export function generateStaticParams() {
   return SUBJECTS.filter((s) => s.implemented).map((s) => ({ subject: s.id }));
 }
 
-// 単元・問題一覧。学年は ?grade= で切り替え可能（学年をまたいだ復習）。
+// 単元一覧ページ。学年は ?grade= で切り替え可能（学年をまたいだ復習）。
+// 個々の問題一覧は単元を選んだ先の /study/[subject]/unit/[unitId] に分離している
+// （1教科あたり数百問になったため、1ページに全問並べるとスクロールが長すぎるため）。
 export default function SubjectPage({
   params,
   searchParams,
@@ -48,37 +50,27 @@ export default function SubjectPage({
         ))}
       </div>
 
-      {units.map((unit) => {
-        const problems = findProblems({ subject: subject.id, grade, unitId: unit.id });
-        return (
-          <section key={unit.id} className="space-y-3">
-            <h2 className="font-bold">
-              {unit.name}
-              <span className="ml-2 text-sm font-normal text-ink/50">
-                {problems.length}問
+      <div className="grid gap-3 sm:grid-cols-2">
+        {units.map((unit) => {
+          const problems = findProblems({ subject: subject.id, grade, unitId: unit.id });
+          const solvedRange =
+            problems.length > 0
+              ? `★${Math.min(...problems.map((p) => p.difficulty))}〜★${Math.max(...problems.map((p) => p.difficulty))}`
+              : "";
+          return (
+            <Link
+              key={unit.id}
+              href={`/study/${subject.id}/unit/${unit.id}?grade=${grade}`}
+              className="flex items-center justify-between rounded-2xl bg-white px-5 py-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
+            >
+              <span className="font-bold">{unit.name}</span>
+              <span className="shrink-0 text-sm text-ink/50">
+                {problems.length}問・{solvedRange}
               </span>
-            </h2>
-            <ul className="space-y-2">
-              {problems.map((p, i) => (
-                <li key={p.id}>
-                  <Link
-                    href={`/study/${subject.id}/${p.id}`}
-                    className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
-                  >
-                    <span className="line-clamp-1">
-                      <span className="mr-2 font-bold text-ink/40">Q{i + 1}</span>
-                      {p.question.split("\n")[0]}
-                    </span>
-                    <span className="ml-3 shrink-0 text-sm text-ink/50">
-                      {"★".repeat(p.difficulty)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })}
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

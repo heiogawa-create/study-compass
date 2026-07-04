@@ -23,5 +23,5 @@ export default function ProblemPage({
   const index = siblings.findIndex((p) => p.id === problem.id);
   const nextId = index >= 0 && index + 1 < siblings.length ? siblings[index + 1].id : null;
 
-  return <ProblemWorkspace problem={problem} nextProblemId={nextId} />;
+  return <ProblemWorkspace problem={problem} nextProblemId={nextId} backHref={`/study/${problem.subject}/unit/${problem.unit.id}?grade=${problem.grade}`} />;
 }
