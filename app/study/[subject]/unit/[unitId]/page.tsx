@@ -63,7 +63,9 @@ export default function UnitPage({
             >
               <span className="line-clamp-1">
                 <span className="mr-2 font-bold text-ink/40">Q{i + 1}</span>
-                {p.question.split("\n")[0]}
+                {/* 「次の計算をしなさい」のような指示文だけだと問題どうしの見分けがつかないため、
+                    改行区切りの中身（実際の式・数値）もつなげて表示する */}
+                {p.question.replace(/\n/g, "　")}
               </span>
               <span className="ml-3 shrink-0 text-sm text-ink/50">{"★".repeat(p.difficulty)}</span>
             </Link>
