@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { findProblems, listGrades, listUnits } from "@/lib/problems";
 import { getSubject, SUBJECTS } from "@/lib/subjects";
 import { GRADE_LABELS, type Grade } from "@/lib/types";
+import { UnitProgressChip } from "@/components/ProgressMarks";
 
 export function generateStaticParams() {
   return SUBJECTS.filter((s) => s.implemented).map((s) => ({ subject: s.id }));
@@ -61,9 +62,12 @@ export default function SubjectPage({
             <Link
               key={unit.id}
               href={`/study/${subject.id}/unit/${unit.id}?grade=${grade}`}
-              className="flex items-center justify-between rounded-2xl bg-white px-5 py-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
+              className="flex items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
             >
-              <span className="font-bold">{unit.name}</span>
+              <span className="min-w-0">
+                <span className="block font-bold">{unit.name}</span>
+                <UnitProgressChip problemIds={problems.map((p) => p.id)} />
+              </span>
               <span className="shrink-0 text-sm text-ink/50">
                 {problems.length}問・{solvedRange}
               </span>

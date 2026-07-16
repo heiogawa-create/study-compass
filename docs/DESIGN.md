@@ -56,6 +56,7 @@ study-compass/
 │           └── webhook/route.ts     # サブスク状態のWebhook受信
 ├── components/
 │   ├── ProblemWorkspace.tsx         # 演習画面本体（クライアント）
+│   ├── ProgressMarks.tsx            # クリア状況の表示（✅/🔸マーク・「n問クリア」チップ。localStorageの履歴を参照）
 │   └── charts.tsx                   # ダッシュボード用の軽量SVGチャート
 ├── lib/
 │   ├── types.ts                     # 共有型（Problem / Attempt / Subject / Grade）
@@ -64,8 +65,8 @@ study-compass/
 │   │   ├── math-grade1.ts
 │   │   ├── english-grade1.ts
 │   │   └── index.ts                 # 検索・取得API（教科/学年/単元でフィルタ）
-│   ├── lessons/                     # 単元ごとの導入レッスン文（演習前に表示）
-│   │   ├── english-grade1.ts
+│   ├── lessons/                     # 単元ごとの導入レッスン文（演習前に表示。全教科・全単元分）
+│   │   ├── math-grade1.ts / english-grade1.ts / japanese-grade1.ts / ...
 │   │   └── index.ts                 # 教科追加時はここでレッスンファイルをimport
 │   ├── prompts/                     # ★プロンプトテンプレート（教科ごとに調整可能）
 │   │   ├── guardrails.ts            # 全教科共通の安全ガードレール

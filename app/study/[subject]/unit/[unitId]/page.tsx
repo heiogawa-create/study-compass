@@ -4,6 +4,7 @@ import { findProblems, listGrades, listUnits } from "@/lib/problems";
 import { getSubject, SUBJECTS } from "@/lib/subjects";
 import { GRADE_LABELS, type Grade } from "@/lib/types";
 import { getLesson } from "@/lib/lessons/index";
+import { SolvedMark, UnitProgressChip } from "@/components/ProgressMarks";
 
 export function generateStaticParams() {
   const params: { subject: string; unitId: string }[] = [];
@@ -53,6 +54,9 @@ export default function UnitPage({
           <span className="ml-2 text-sm font-normal text-ink/50">
             {GRADE_LABELS[grade]}・{problems.length}問
           </span>
+          <span className="ml-2 align-middle">
+            <UnitProgressChip problemIds={problems.map((p) => p.id)} />
+          </span>
         </h1>
       </div>
 
@@ -70,11 +74,14 @@ export default function UnitPage({
               href={`/study/${subject.id}/${p.id}`}
               className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow"
             >
-              <span className="line-clamp-1">
-                <span className="mr-2 font-bold text-ink/40">Q{i + 1}</span>
-                {/* 「次の計算をしなさい」のような指示文だけだと問題どうしの見分けがつかないため、
-                    改行区切りの中身（実際の式・数値）もつなげて表示する */}
-                {p.question.replace(/\n/g, "　")}
+              <span className="flex min-w-0 items-center">
+                <SolvedMark problemId={p.id} />
+                <span className="line-clamp-1">
+                  <span className="mr-2 font-bold text-ink/40">Q{i + 1}</span>
+                  {/* 「次の計算をしなさい」のような指示文だけだと問題どうしの見分けがつかないため、
+                      改行区切りの中身（実際の式・数値）もつなげて表示する */}
+                  {p.question.replace(/\n/g, "　")}
+                </span>
               </span>
               <span className="ml-3 shrink-0 text-sm text-ink/50">{"★".repeat(p.difficulty)}</span>
             </Link>
